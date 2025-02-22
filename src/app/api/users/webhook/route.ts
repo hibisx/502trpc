@@ -2,7 +2,7 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { db } from "@/db";
-import { usersTable } from "@/db/schema";
+import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function POST(req: Request) {
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
   if (eventType === "user.created") {
     const { data } = evt;
 
-    await db.insert(usersTable).values({
+    await db.insert(users).values({
       clerkId: data.id,
       name: `${data.first_name} ${data.last_name}`,
       imageUrl: data.image_url,
@@ -72,19 +72,19 @@ export async function POST(req: Request) {
       return new Response("No user id", { status: 400 });
     }
 
-    await db.delete(usersTable).where(eq(usersTable.clerkId, data.id));
+    await db.delete(users).where(eq(users.clerkId, data.id));
   }
 
   if (eventType === "user.updated") {
     const { data } = evt;
 
     await db
-      .update(usersTable)
+      .update(users)
       .set({
         name: `${data.first_name} ${data.last_name}}`,
         imageUrl: data.image_url,
       })
-      .where(eq(usersTable.clerkId, data.id));
+      .where(eq(users.clerkId, data.id));
   }
 
   return new Response("Webhook received", { status: 200 });

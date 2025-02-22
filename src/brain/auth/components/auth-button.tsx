@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { Sign } from "crypto";
 import { User2 } from "lucide-react";
 import React from "react";
 
@@ -9,8 +8,9 @@ const AuthButton = () => {
     <>
       <SignedOut>
         <SignInButton>
-          <Button variant="ghost" size="icon">
+          <Button variant="secondary">
             <User2 className="size-4" />
+            Sign In
           </Button>
         </SignInButton>
       </SignedOut>
